@@ -71,3 +71,15 @@ func ReadUnsignedShort(reader *bytes.Reader) (uint16, error) {
 	err := binary.Read(reader, binary.BigEndian, &ushort)
 	return ushort, err
 }
+
+func ReadLong(reader *bytes.Reader) (int64, error) {
+	var long int64
+	err := binary.Read(reader, binary.BigEndian, &long)
+	return long, err
+}
+
+func MakeLong(value int64) []byte {
+	buf := make([]byte, 8)
+	binary.BigEndian.PutUint64(buf, uint64(value))
+	return buf
+}
