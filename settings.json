@@ -1,6 +1,7 @@
 {
-  "versionName": "1.12.2",
-  "protocol": "340",
+  "versionName": "26.2",
+  "protocol": "776",
   "port": "25565",
-  "MOTD": "Hello world!"
+  "MOTD": "Hello world!",
+  "onlineMode": false
 }

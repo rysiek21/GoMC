@@ -2,10 +2,14 @@ package main
 
 import (
 	"bytes"
+	"crypto/md5"
 	"encoding/binary"
 	"errors"
+	"fmt"
 	"io"
 )
+
+type UUID [16]byte
 
 func ReadVarInt(reader io.ByteReader) (int, error) {
 	var value int
@@ -82,4 +86,22 @@ func MakeLong(value int64) []byte {
 	buf := make([]byte, 8)
 	binary.BigEndian.PutUint64(buf, uint64(value))
 	return buf
+}
+
+func ReadUUID(reader *bytes.Reader) (UUID, error) {
+	var u UUID
+	_, err := io.ReadFull(reader, u[:])
+	return u, err
+}
+
+func GenerateOfflineUUID(username string) UUID {
+	data := []byte("OfflinePlayer:" + username)
+	hash := md5.Sum(data)
+	hash[6] = (hash[6] & 0x0f) | 0x30
+	hash[8] = (hash[8] & 0x3f) | 0x80
+	return hash
+}
+
+func (u UUID) String() string {
+	return fmt.Sprintf("%x-%x-%x-%x-%x", u[0:4], u[4:6], u[6:8], u[8:10], u[10:16])
 }
